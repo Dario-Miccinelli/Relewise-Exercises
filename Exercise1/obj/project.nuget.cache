@@ -1,0 +1,13 @@
+{
+  "version": 2,
+  "dgSpecHash": "mPT7OlaWp+I=",
+  "success": true,
+  "projectFilePath": "C:\\Users\\poduz\\OneDrive\\Desktop\\Relewise-Exercises\\Exercise1\\Exercise1.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\poduz\\.nuget\\packages\\messagepack\\2.3.85\\messagepack.2.3.85.nupkg.sha512",
+    "C:\\Users\\poduz\\.nuget\\packages\\messagepack.annotations\\2.3.85\\messagepack.annotations.2.3.85.nupkg.sha512",
+    "C:\\Users\\poduz\\.nuget\\packages\\newtonsoft.json\\13.0.1\\newtonsoft.json.13.0.1.nupkg.sha512",
+    "C:\\Users\\poduz\\.nuget\\packages\\relewise.client\\1.170.0\\relewise.client.1.170.0.nupkg.sha512"
+  ],
+  "logs": []
+}
