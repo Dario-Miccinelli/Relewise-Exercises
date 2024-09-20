@@ -46,8 +46,6 @@ public class JobArguments
     public IReadOnlyDictionary<string, string> JobConfiguration { get; }
 }
 
-
-
 // Define the ProductRaw class
 public class ProductRaw
 {
