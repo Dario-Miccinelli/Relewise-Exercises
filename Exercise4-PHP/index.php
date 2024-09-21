@@ -56,7 +56,6 @@ function mapGoogleShoppingFeed()
     return "Mapped " . count($mappedProducts) . " products from " . $url;
 }
 
-
 // Exercise 3 
 function mapRawProductData()
 {
