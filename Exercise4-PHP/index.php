@@ -44,7 +44,7 @@ function mapGoogleShoppingFeed()
         return "Error loading XML: " . $url;
     }
     $mappedProducts = [];
-
+    
     foreach ($xml->channel->item as $item) {
         $product = new Product();
         $product->setId((string)$item->children('g', true)->id);
