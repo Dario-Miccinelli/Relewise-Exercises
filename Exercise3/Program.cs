@@ -79,8 +79,8 @@ public class RawProductJob : IJob
         var products = new List<Product>(); // Create a list to store the mapped products
         var lines = rawData.Split(new[] { '\n' }, StringSplitOptions.RemoveEmptyEntries); // Split the raw data into lines
 
-        // Skip the header line
-        for (int i = 1; i < lines.Length; i++) 
+        // Skip the header lines
+        for (int i = 2; i < lines.Length; i++) 
         {
             token.ThrowIfCancellationRequested(); // Check if the operation was cancelled
 
@@ -91,16 +91,14 @@ public class RawProductJob : IJob
                 fields[j] = fields[j].Trim();  
             }
 
-            if (fields.Length < 5) 
-                continue; // Skip incomplete lines
-
             var productId = fields[0]; 
             var productName = fields[1] + " " +  fields[2];
             var salesPriceString = fields[3].Replace("$", "").Trim(); // Trim the sales price and convert it to a string
             var listPriceString = fields[4].Replace("$", "").Trim(); // Trim the list price and convert it to a string
+            
             // Log the values for debugging
-            // await info (productName); // Log the product name (for debugging purposes)
-            await info($"Processing Product ID: {productId}, Sales Price: {salesPriceString}, List Price: {listPriceString}"); // Log the product ID, sales price, and list price (for debugging purposes)
+            // await info (productName); 
+            // await info($"Processing Product ID: {productId}, Sales Price: {salesPriceString}, List Price: {listPriceString}"); 
 
             // Validate that the sales price and list price are valid decimals
             if (decimal.TryParse(salesPriceString, out decimal salesPrice) &&  // Check if the sales price is a valid decimal
@@ -118,7 +116,7 @@ public class RawProductJob : IJob
             else
             {
                 await warn($"Invalid price format for Product ID: {productId}, Sales Price: {salesPriceString}, List Price: {listPriceString}");
-            } // Log an error message if the sales price or list price is not valid
+            } 
         }
 
         return $"Mapped {products.Count} products successfully.";
