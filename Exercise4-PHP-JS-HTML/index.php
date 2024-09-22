@@ -58,23 +58,36 @@ function mapRawProductData()
 {
     $url = 'https://cdn.relewise.com/academy/productdata/raw';
     $data = file_get_contents($url);
-
+    if ($data === false) {
+        return "Failed to fetch data from " . $url;
+    }
     $lines = explode("\n", $data);
     $mappedProducts = [];
 
     // Skip the header lines and map each product
     foreach (array_slice($lines, 2) as $line) {
-        $fields = str_getcsv($line);
-        $product = new Product();
-        $product->setId($fields[0]);
-        $product->setDisplayName(new Multilingual($fields[1]));
-        $product->setSalesPrice(new MultiCurrency([['Currency' => 'USD', 'Value' => (float)trim($fields[3], '$')]])); // Sales Price
-        $product->setListPrice(new MultiCurrency(['Currency' => 'USD', 'Value' => (float)trim($fields[4], '$')]));  // List Price
+        // Use preg_split to split fields by '|' and remove empty fields
+        $fields = array_values(array_filter(preg_split('/\|/', $line), function($value) {
+            return trim($value) !== '';
+        }));
 
+        // Ensure the correct number of fields (at least 9 expected)
+        // | 1 | Smart TV 32" | Samsung | $349.99 | $399.99| Full HD Smart TV| Yes | Black| Electronics>TVs|  (Example line)
+        if (count($fields) < 9) {
+            echo "Error: the line ID: " . (isset($fields[0]) ? $fields[0] : "Unknown") . " is not valid or incomplete.\n";
+            continue;
+        }
+        // Create a new product and map the fields
+        $product = new Product();
+        $product->setId($fields[0]); // Set product ID
+        $product->setDisplayName(new Multilingual($fields[1])); // Set product name
+        $product->setSalesPrice(new MultiCurrency([['Currency' => 'USD', 'Value' => (float)trim($fields[3], '$')]])); // Sales Price
+        $product->setListPrice(new MultiCurrency([['Currency' => 'USD', 'Value' => (float)trim($fields[4], '$')]]));  // List Price
         $mappedProducts[] = $product;
     }
     echo "Mapped " . count($mappedProducts) . " products from " . $url;
 }
+
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $action = $_POST['action'] ?? '';
